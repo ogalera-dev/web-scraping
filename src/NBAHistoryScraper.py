@@ -7,19 +7,21 @@ Created on Sun Oct 13 17:21:33 2019
 """
 from PlayersPageScraper import PlayersPageScraper as PlayersScraper
 
-#Aquest modul conté la lògica que s'encarrega de descarregar totes les dades 
-#de tots els jugadors de la història de la NBA. 
+#Aquest modul conté la lògica que s'encarrega de descarregar les dades de informació
+#estadístiques i totals de tots els jugadors de la història de la NBA. 
 #
-#Coneix el mòdul PlayersPageScraper
+#Coneix el mòdul PlayersPageScraper.
 class NBAHistoryScraper():
     
     def __init__(self, pool):
         self.url = 'https://www.basketball-reference.com'
         self.subdomain = 'players'
-        self.letters = list(map(chr, range(97, 123)))
+        #Rang de lletres de a-w i y-z
+        self.letters = list(map(chr, range(97, 120))) + list(map(chr, range(121, 123)))
         self.pool = pool
         self.player_scraper = PlayersScraper(self.pool)
         
+    #Agrupa les dades dels partits en format diccionari
     def __group_data_game(self, datas_per_game):
         id = []; year = []; games = []; age = []; team = []; assists = []; steals = []; blocks = []; personal_fouls = []; 
         ofensive_rebounds = []; defensive_rebounds = []; points_per_game = []
@@ -41,6 +43,7 @@ class NBAHistoryScraper():
                 'blocks': blocks, 'personal_fouls': personal_fouls, 'ofensive_rebounds': ofensive_rebounds, 
                 'defensive_rebounds': defensive_rebounds, 'points_per_game': points_per_game}
     
+    #Agrupa la informació dels jugadors en format diccionari.
     def __group_players_info(self, players_info):
         id = []; name = []; start_year = []; end_year = []; position = []; height = []; weight = []; birth_date = []; collage = []
         for player_info in players_info:
@@ -57,6 +60,7 @@ class NBAHistoryScraper():
         return {'id': id, 'name': name, 'start_year': start_year, 'end_year': end_year, 'position': position, 
                 'height': height, 'weight': weight, 'birth_date': birth_date, 'collage': collage}
     
+    #Agrupa les dades estadístiques totals en format diccionari.
     def __group_players_totals(self, players_totals):
         id = []; games = []; assists = []; steals = []; blocks = []; personal_fouls = []; 
         ofensive_rebounds = []; defensive_rebounds = []; points = []
@@ -74,10 +78,17 @@ class NBAHistoryScraper():
         return {'id': id, 'games': games, 'assists': assists, 'steals': steals, 'blocks': blocks, 'personal_fouls': personal_fouls, 
          'ofensive_rebounds': ofensive_rebounds, 'defensive_rebounds': defensive_rebounds, 'points': points}
     
+    #Descarrega les dades i retorna tres datasets.
+    # 1er: Informació de cada jugador.
+    # 2on: Dades estadístiques de cada jugador i temporada.
+    # 3er: Dades totals de la carrera de cada jugador.
     def download_data(self):
         players_info = []
         games_data = []
         players_totals = []
+        
+        #El scraping es fa per lletra, on el scraping d'una lletra es refereix a descarregar
+        #i processar les dades de tots aquells jugadors on el seu primer cognom comença per aquella lletra.
         for letter in self.letters:
             letter_data = self.player_scraper.scrapPlayers(self.url,self.subdomain,letter)
             players_info = players_info + letter_data[0]
