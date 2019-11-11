@@ -18,6 +18,14 @@ Aquesta pràctica s'ha realitzat individualment per l'alumne Òscar Galera i Alf
 * **usa-map/src/main.py**: Punt d'entrada als diferents testos de les dades.
 * **usa-map/src/MapPinter.py**: Conté la lògica per dibuixar un mapa de calor dels estats units d'Amèrica a partir del nom dels equips de la NBA i un conjunt de valors.
 
+
+## Dades
+Les dades es troben en el directori **data/**, que conté els fitxers:
+
+* **info_players.csv:** Dades referents a informació dels jugadors.
+* **data_players.csv:**  Dades estadístiques percentuals de cada jugador i temporada.
+* **totals.csv:** Dades estadístiques referents a la carrera professional de cada un dels jugadors.
+
 ## Bibliografia emprada:
 Subirats, L., Calvo, M. (2018). Web Scraping. Editorial UOC.
 Masip, D. EL lenguaje Python. Editorial UOC.
